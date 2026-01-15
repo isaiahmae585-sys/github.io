@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Spanish Learning Flashcards</title>
+  <style>
+    /* 基础样式 */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f6f7fb;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #3498db;
+    }
+    
+    h2 {
+      color: #2980b9;
+      margin: 30px 0 15px 0;
+      padding-left: 10px;
+      border-left: 4px solid #3498db;
+      background-color: #e8f4fc;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    
+    /* 卡片容器样式 */
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    /* 卡片样式 */
+    .card {
+      height: 200px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    
+    .inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    
+    .card.flipped .inner {
+      transform: rotateY(180deg);
+    }
+    
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .front {
+      background-color: #ffffff;
+      border: 2px solid #3498db;
+      color: #2c3e50;
+      font-size: 1.2rem;
+      font-weight: 600;
+      overflow-y: auto;
+    }
+    
+    .back {
+      background-color: #2c3e50;
+      color: white;
+      transform: rotateY(180deg);
+      font-size: 0.95rem;
+      overflow-y: auto;
+    }
+    
+    .language {
+      margin: 6px 0;
+      padding: 4px 0;
+      width: 100%;
+    }
+    
+    .spanish {
+      color: #f1c40f;
+      font-weight: bold;
+    }
+    
+    .english {
+      color: #ecf0f1;
+    }
+    
+    .chinese {
+      color: #e74c3c;
+    }
+    
+    .multi-item {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+    
+    .multi-item:last-child {
+      border-bottom: none;
+    }
+    
+    /* 导航栏 */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      background-color: #2c3e50;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .nav-button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+    
+    .nav-button:hover {
+      background-color: #2980b9;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      
+      .card {
+        height: 180px;
+      }
+      
+      .front {
+        font-size: 1.1rem;
+      }
+      
+      .back {
+        font-size: 0.9rem;
+      }
+      
+      .nav-bar {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .nav-button {
+        width: 90%;
+        margin-bottom: 5px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+    
+    /* 页脚 */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+    
+    /* 统计信息 */
+    .stats {
+      text-align: center;
+      margin: 20px 0;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Complete Spanish Learning Flashcards</h1>
+  
+  <div class="stats">Total sections: 8 | Click any card to flip</div>
+  
+  <!-- 导航栏 -->
+  <div class="nav-bar">
+    <button class="nav-button" onclick="scrollToSection('personal-info')">Personal Info</button>
+    <button class="nav-button" onclick="scrollToSection('profession')">Profession</button>
+    <button class="nav-button" onclick="scrollToSection('classroom')">Classroom</button>
+    <button class="nav-button" onclick="scrollToSection('greetings')">Greetings</button>
+    <button class="nav-button" onclick="scrollToSection('weather')">Weather & Time</button>
+    <button class="nav-button" onclick="scrollToSection('numbers')">Numbers</button>
+    <button class="nav-button" onclick="scrollToSection('vocabulary')">Vocabulary</button>
+    <button class="nav-button" onclick="scrollToSection('culture')">Culture</button>
+    <button class="nav-button" onclick="scrollToSection('other')">Other Words</button>
+  </div>
+  
+  <!-- 个人信息 -->
+  <h2 id="personal-info">Información Personal / Personal Information</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Cuál es tu nombre?<br>¿Cómo te llamas?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Mi nombre es Jia. / Me llamo Jia.</div>
+            <div class="language english">My name is Jia.</div>
+            <div class="language chinese">我的名字是Jia。 / 我叫Jia。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Cómo te apellidas?<br>¿Cómo se escribe tu nombre?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Me apellido es Jia.</div>
+            <div class="language english">My surname is Jia.</div>
+            <div class="language chinese">我姓Jia。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mi nombre se escribe: J I A.</div>
+            <div class="language english">My name is spelled: J I A.</div>
+            <div class="language chinese">我的名字拼写是：J I A。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Cuál es tu número de teléfono?<br>¿Cuál es tu correo electrónico?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Mi número es: 9 8 6 6 7 9 8 6 6</div>
+            <div class="language english">My number is: 9 8 6 6 7 9 8 6 6</div>
+            <div class="language chinese">我的电话号码是：9 8 6 6 7 9 8 6 6</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mi correo es: 1432645440@qq.com</div>
+            <div class="language english">My email is: 1432645440@qq.com</div>
+            <div class="language chinese">我的电子邮件是：1432645440@qq.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿De dónde eres?<br>¿Dónde vives?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Soy de China.</div>
+            <div class="language english">I'm from China.</div>
+            <div class="language chinese">我来自中国。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Vivo en Lima, Perú.</div>
+            <div class="language english">I live in Lima, Peru.</div>
+            <div class="language chinese">我住在秘鲁利马。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Cuántos años tienes?<br>¿Cuándo es tu cumpleaños?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Tengo [número] años.</div>
+            <div class="language english">I am [number] years old.</div>
+            <div class="language chinese">我 [数字] 岁了。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mi cumpleaños es el [día] de [mes].</div>
+            <div class="language english">My birthday is on [day] of [month].</div>
+            <div class="language chinese">我的生日是 [月份] 的 [日期]。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 职业与语言 -->
+  <h2 id="profession">Profesión e Idiomas / Profession and Languages</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿A qué te dedicas?<br>¿En qué trabajas?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Soy geólogo/geóloga.</div>
+            <div class="language english">I am a geologist (male/female).</div>
+            <div class="language chinese">我是一名地质学家（男性/女性）。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Trabajo en la geología.</div>
+            <div class="language english">I work in geology.</div>
+            <div class="language chinese">我从事地质学领域的工作。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Qué idiomas hablas?<br>¿Cuánto tiempo está en Perú?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Hablo español, inglés, portugués y un poco de francés.</div>
+            <div class="language english">I speak Spanish, English, Portuguese and a little French.</div>
+            <div class="language chinese">我会说西班牙语、英语、葡萄牙语和一点法语。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">3 años.</div>
+            <div class="language english">3 years.</div>
+            <div class="language chinese">3年。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 课堂表达 -->
+  <h2 id="classroom">Expresiones de Clase / Classroom Expressions</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Classroom Questions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¿Puedo ir al baño?</div>
+            <div class="language english">May I go to the bathroom?</div>
+            <div class="language chinese">我可以去洗手间吗？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Tengo una pregunta.</div>
+            <div class="language english">I have a question.</div>
+            <div class="language chinese">我有一个问题。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">No entiendo. ¿Puedes repetir?</div>
+            <div class="language english">I don't understand. Can you repeat?</div>
+            <div class="language chinese">我不懂。你能重复一遍吗？</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Classroom Activities</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Ya he terminado / Aún no termino.</div>
+            <div class="language english">I'm finished / I'm not finished yet.</div>
+            <div class="language chinese">我完成了 / 我还没完成。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mañana tenemos examen.</div>
+            <div class="language english">We have an exam tomorrow.</div>
+            <div class="language chinese">明天我们有考试。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Completar la actividad.</div>
+            <div class="language english">Complete the activity.</div>
+            <div class="language chinese">完成这项活动。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Classroom Instructions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Silencio, por favor.</div>
+            <div class="language english">Silence, please.</div>
+            <div class="language chinese">请安静。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Abran sus libros en la página...</div>
+            <div class="language english">Open your books to page...</div>
+            <div class="language chinese">请把书翻到第......页。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Trabajar en grupo / Trabajar en parejas.</div>
+            <div class="language english">Work in groups / Work in pairs.</div>
+            <div class="language chinese">分组活动 / 两人一组。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Learning Expressions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¿Cómo se dice...? / ¿Qué significa "meaning"?</div>
+            <div class="language english">How do you say...? / What does "meaning" mean?</div>
+            <div class="language chinese">......用西班牙语怎么说？ / "meaning"是什么意思？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">¿Cómo se pronuncia esta palabra?</div>
+            <div class="language english">How do you pronounce this word?</div>
+            <div class="language chinese">这个单词怎么发音？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">¿Podría hablar más despacio, por favor?</div>
+            <div class="language english">Could you speak more slowly, please?</div>
+            <div class="language chinese">您可以说得慢一点吗？</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Classroom Interaction</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¿Algún voluntario? / ¿Hay algún voluntario para participar?</div>
+            <div class="language english">Any volunteers? / Is there a volunteer to participate?</div>
+            <div class="language chinese">有志愿者吗？ / 有想自愿参加的同学吗？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Preguntar al compañero.</div>
+            <div class="language english">Ask your partner.</div>
+            <div class="language chinese">问一下你的同伴。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Lee y escribe.</div>
+            <div class="language english">Read and write.</div>
+            <div class="language chinese">读和写。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Student Expressions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Profesora, tengo una pregunta.</div>
+            <div class="language english">Teacher, I have a question.</div>
+            <div class="language chinese">老师，我有一个问题。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Ya terminé, profesora.</div>
+            <div class="language english">Teacher, I've finished.</div>
+            <div class="language chinese">老师，我完成了。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Necesitamos más tiempo, por favor.</div>
+            <div class="language english">We need more time, please.</div>
+            <div class="language chinese">我们需要更多时间，请等一下。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Lo siento, tuve que trabajar. / ¿Por qué llegas tarde?</div>
+            <div class="language english">I'm sorry, I had to work. / Why are you late?</div>
+            <div class="language chinese">对不起，我得去工作。 / 你为什么迟到？</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 问候与道别 -->
+  <h2 id="greetings">Saludos y Despedidas / Greetings and Farewells</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Basic Greetings</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¡Hola a todos! / ¡Hola!</div>
+            <div class="language english">Hello everyone! / Hi!</div>
+            <div class="language chinese">大家好！ / 嗨！</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Buenos días / Buenas tardes / Buenas noches</div>
+            <div class="language english">Good morning / Good afternoon / Good evening</div>
+            <div class="language chinese">早上好 / 下午好 / 晚上好</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Asking How Someone Is</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¿Qué tal? / ¿Cómo está(s)?</div>
+            <div class="language english">How are you? (formal/informal)</div>
+            <div class="language chinese">你好吗？ / 您好吗？/ 你好吗？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">¿Qué hay? / ¿Cómo va?</div>
+            <div class="language english">What's up? / How's it going?</div>
+            <div class="language chinese">怎么样？ / 最近怎么样？</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Greeting Dialogue</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">¡Hola! ¿Cómo estás?</div>
+            <div class="language english">Hi! How are you?</div>
+            <div class="language chinese">嗨！你好吗？</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Muy bien, ¡gracias! / Bien, ¿y tú?</div>
+            <div class="language english">Very well, thanks! / Good, and you?</div>
+            <div class="language chinese">很好，谢谢！ / 不错，你呢？</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Farewells</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Adiós / ¡Chau! / ¡Bye bye!</div>
+            <div class="language english">Goodbye / Bye! / Goodbye!</div>
+            <div class="language chinese">再见 / 拜拜！ / 再见！</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Hasta mañana / Hasta la próxima clase</div>
+            <div class="language english">See you tomorrow / See you next class</div>
+            <div class="language chinese">明天见 / 下节课见</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Chau, ¡buen fin de semana! / ¡Cuídate!</div>
+            <div class="language english">Bye, have a good weekend! / Take care!</div>
+            <div class="language chinese">拜拜，周末愉快！ / 保重！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 天气与时间 -->
+  <h2 id="weather">Clima y Tiempo / Weather and Time</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Weather in Lima & Work</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">En Lima, hace mucho calor.</div>
+            <div class="language english">In Lima, it's very hot.</div>
+            <div class="language chinese">在利马，天气很热。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">En Lima, normalmente hace frío.</div>
+            <div class="language english">In Lima, it's usually cold.</div>
+            <div class="language chinese">在利马，通常很冷。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Todo el año hace calor en Trujillo.</div>
+            <div class="language english">It's hot all year round in Trujillo.</div>
+            <div class="language chinese">在特鲁希略，全年都很热。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Work Time Expressions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Todo el día trabajo. / Mucho trabajo</div>
+            <div class="language english">I work all day. / A lot of work</div>
+            <div class="language chinese">我整天工作。 / 很多工作</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">No trabajan el fin de semana.</div>
+            <div class="language english">They don't work on the weekend.</div>
+            <div class="language chinese">他们周末不工作。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Yo trabajo el fin de semana. / Yo no trabajo el fin de semana.</div>
+            <div class="language english">I work on the weekend. / I don't work on the weekend.</div>
+            <div class="language chinese">我周末工作。 / 我周末不工作。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Weather Terms</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Hace sol. / Hace calor. / Hace frío.</div>
+            <div class="language english">It's sunny. / It's hot. / It's cold.</div>
+            <div class="language chinese">天气晴朗。 / 天气热。 / 天气冷。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Hace viento. / Está nublado.</div>
+            <div class="language english">It's windy. / It's cloudy.</div>
+            <div class="language chinese">刮风。 / 多云。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Llueve. / Nieva. / Hay tormenta.</div>
+            <div class="language english">It's raining. / It's snowing. / There's a storm.</div>
+            <div class="language chinese">下雨。 / 下雪。 / 有暴风雨。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Seasons & Weather Vocabulary</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Primavera / Verano / Otoño / Invierno</div>
+            <div class="language english">Spring / Summer / Autumn / Winter</div>
+            <div class="language chinese">春天 / 夏天 / 秋天 / 冬天</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Temperatura / Grados / Pronóstico del tiempo</div>
+            <div class="language english">Temperature / Degrees / Weather forecast</div>
+            <div class="language chinese">温度 / 度 / 天气预报</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Months of the Year</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Enero / Febrero / Marzo / Abril</div>
+            <div class="language english">January / February / March / April</div>
+            <div class="language chinese">一月 / 二月 / 三月 / 四月</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mayo / Junio / Julio / Agosto</div>
+            <div class="language english">May / June / July / August</div>
+            <div class="language chinese">五月 / 六月 / 七月 / 八月</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Septiembre / Octubre / Noviembre / Diciembre</div>
+            <div class="language english">September / October / November / December</div>
+            <div class="language chinese">九月 / 十月 / 十一月 / 十二月</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Days of the Week</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Lunes / Martes / Miércoles / Jueves</div>
+            <div class="language english">Monday / Tuesday / Wednesday / Thursday</div>
+            <div class="language chinese">星期一 / 星期二 / 星期三 / 星期四</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Viernes / Sábado / Domingo</div>
+            <div class="language english">Friday / Saturday / Sunday</div>
+            <div class="language chinese">星期五 / 星期六 / 星期日</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Parts of the Day</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Mañana / Mediodía / Tarde</div>
+            <div class="language english">Morning / Noon / Afternoon</div>
+            <div class="language chinese">早晨，上午 / 中午 / 下午</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Noche / Madrugada / Medianoche</div>
+            <div class="language english">Evening, Night / Early morning / Midnight</div>
+            <div class="language chinese">晚上，夜晚 / 凌晨 / 午夜</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Time Expressions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Hoy / Ayer / Mañana</div>
+            <div class="language english">Today / Yesterday / Tomorrow</div>
+            <div class="language chinese">今天 / 昨天 / 明天</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Pasado mañana / Anteayer</div>
+            <div class="language english">The day after tomorrow / The day before yesterday</div>
+            <div class="language chinese">后天 / 前天</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Esta semana / La semana pasada / La semana que viene</div>
+            <div class="language english">This week / Last week / Next week</div>
+            <div class="language chinese">这周 / 上周 / 下周</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Este año / El año pasado / El año que viene</div>
+            <div class="language english">This year / Last year / Next year</div>
+            <div class="language chinese">今年 / 去年 / 明年</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 状态与评价 -->
+  <h2 id="states">Estados y Evaluaciones / States and Evaluations</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">¿Cómo estuvo tu fin de semana?</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Muy bien / Bien / Más o menos / Mal</div>
+            <div class="language english">Very good / Good / So-so / Bad</div>
+            <div class="language chinese">非常好 / 好 / 一般，还行 / 不好</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Cansado / Ocupado</div>
+            <div class="language english">Tired / Busy</div>
+            <div class="language chinese">累的 / 忙碌的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 数字 -->
+  <h2 id="numbers">Números / Numbers</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Numbers 1-10</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Uno / Dos / Tres / Cuatro / Cinco</div>
+            <div class="language english">One / Two / Three / Four / Five</div>
+            <div class="language chinese">一 / 二 / 三 / 四 / 五</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Seis / Siete / Ocho / Nueve / Diez</div>
+            <div class="language english">Six / Seven / Eight / Nine / Ten</div>
+            <div class="language chinese">六 / 七 / 八 / 九 / 十</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Numbers 11-20</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Once / Doce / Trece / Catorce / Quince</div>
+            <div class="language english">Eleven / Twelve / Thirteen / Fourteen / Fifteen</div>
+            <div class="language chinese">十一 / 十二 / 十三 / 十四 / 十五</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Dieciséis / Diecisiete / Dieciocho / Diecinueve / Veinte</div>
+            <div class="language english">Sixteen / Seventeen / Eighteen / Nineteen / Twenty</div>
+            <div class="language chinese">十六 / 十七 / 十八 / 十九 / 二十</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Tens (10, 20, 30...100)</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">10: Diez / 20: Veinte / 30: Treinta / 40: Cuarenta</div>
+            <div class="language english">10: Ten / 20: Twenty / 30: Thirty / 40: Forty</div>
+            <div class="language chinese">10: 十 / 20: 二十 / 30: 三十 / 40: 四十</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">50: Cincuenta / 60: Sesenta / 70: Setenta / 80: Ochenta</div>
+            <div class="language english">50: Fifty / 60: Sixty / 70: Seventy / 80: Eighty</div>
+            <div class="language chinese">50: 五十 / 60: 六十 / 70: 七十 / 80: 八十</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">90: Noventa / 100: Cien</div>
+            <div class="language english">90: Ninety / 100: One hundred</div>
+            <div class="language chinese">90: 九十 / 100: 一百</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Numbers 21-29</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">21: Veintiuno / 22: Veintidós / 23: Veintitrés / 24: Veinticuatro</div>
+            <div class="language english">21: Twenty-one / 22: Twenty-two / 23: Twenty-three / 24: Twenty-four</div>
+            <div class="language chinese">21: 二十一 / 22: 二十二 / 23: 二十三 / 24: 二十四</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">25: Veinticinco / 26: Veintiséis / 27: Veintisiete</div>
+            <div class="language english">25: Twenty-five / 26: Twenty-six / 27: Twenty-seven</div>
+            <div class="language chinese">25: 二十五 / 26: 二十六 / 27: 二十七</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">28: Veintiocho / 29: Veintinueve</div>
+            <div class="language english">28: Twenty-eight / 29: Twenty-nine</div>
+            <div class="language chinese">28: 二十八 / 29: 二十九</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Compound Numbers</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">31: Treinta y uno / 42: Cuarenta y dos / 58: Cincuenta y ocho</div>
+            <div class="language english">31: Thirty-one / 42: Forty-two / 58: Fifty-eight</div>
+            <div class="language chinese">31: 三十一 / 42: 四十二 / 58: 五十八</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">76: Setenta y seis / 99: Noventa y nueve</div>
+            <div class="language english">76: Seventy-six / 99: Ninety-nine</div>
+            <div class="language chinese">76: 七十六 / 99: 九十九</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 学习相关词汇 -->
+  <h2 id="vocabulary">Vocabulario de Aprendizaje / Learning Vocabulary</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Basic Learning Verbs</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Escuchar / Leer / Escribir / Hablar</div>
+            <div class="language english">To listen / To read / To write / To speak</div>
+            <div class="language chinese">听 / 读 / 写 / 说</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Hacer preguntas</div>
+            <div class="language english">To ask questions</div>
+            <div class="language chinese">提问</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Classroom Items</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Práctica / Tarea</div>
+            <div class="language english">Practice / Homework</div>
+            <div class="language chinese">练习 / 作业</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Preguntas / Respuestas</div>
+            <div class="language english">Questions / Answers</div>
+            <div class="language chinese">问题 / 答案</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Compañeros / Relaciona / Doble</div>
+            <div class="language english">Partners / Match / Double</div>
+            <div class="language chinese">同伴 / 匹配 / 双倍</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Question Words</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Como / Cual / Cuánto tiempo / Cuando</div>
+            <div class="language english">Like / Which / How long / When</div>
+            <div class="language chinese">像 / 哪一个 / 多久 / 什么时候</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Mucho</div>
+            <div class="language english">A lot</div>
+            <div class="language chinese">很多</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 节日与文化 -->
+  <h2 id="culture">Fiestas y Cultura / Holidays and Culture</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Christmas & Holidays</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Navidad</div>
+            <div class="language english">Christmas</div>
+            <div class="language chinese">圣诞节</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Fuegos artificiales / Media noche</div>
+            <div class="language english">Fireworks / Midnight</div>
+            <div class="language chinese">烟花 / 午夜</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Tráfico / Fiesta</div>
+            <div class="language english">Traffic / Party</div>
+            <div class="language chinese">交通 / 派对</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Family & Holiday Traditions</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Las familias se reúnen.</div>
+            <div class="language english">Families get together.</div>
+            <div class="language chinese">家人们团聚。</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">24 y 25 de diciembre son feriados.</div>
+            <div class="language english">December 24th and 25th are holidays.</div>
+            <div class="language chinese">12月24日和25日是假期。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 其他词汇 -->
+  <h2 id="other">Otros Vocablos / Other Words</h2>
+  <div class="cards-container">
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">General Vocabulary</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Ciudad / Latinos / Letrero</div>
+            <div class="language english">City / Latin Americans / Sign</div>
+            <div class="language chinese">城市 / 拉丁美洲人 / 标识，标牌</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Tilde (´)</div>
+            <div class="language english">Accent mark</div>
+            <div class="language chinese">重音符号</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card" onclick="this.classList.toggle('flipped')">
+      <div class="inner">
+        <div class="front">Evaluation & Speaking</div>
+        <div class="back">
+          <div class="multi-item">
+            <div class="language spanish">Bien / Muy bien</div>
+            <div class="language english">Good / Very good</div>
+            <div class="language chinese">好 / 很好</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Habla (Tell me)</div>
+            <div class="language english">Tell me (speak)</div>
+            <div class="language chinese">告诉我（你说）</div>
+          </div>
+          <div class="multi-item">
+            <div class="language spanish">Las personas hablan español en Trujillo.</div>
+            <div class="language english">People speak Spanish in Trujillo.</div>
+            <div class="language chinese">在特鲁希略，人们说西班牙语。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <p>Complete Spanish Learning Flashcards - 大班西语学习V1.0</p>
+    <p>Click any card to flip and see translations | 点击卡片翻转查看翻译</p>
+    <p>Total cards: 8 sections with multiple flashcards</p>
+  </footer>
+
+  <script>
+    // 导航到指定部分
+    function scrollToSection(sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    // 添加键盘支持：按空格键可以翻转当前聚焦的卡片
+    document.addEventListener('keydown', function(event) {
+      if (event.code === 'Space') {
+        const activeElement = document.activeElement;
+        if (activeElement.classList.contains('card')) {
+          activeElement.classList.toggle('flipped');
+        }
+      }
+    });
+    
+    // 双击卡片可以翻转（移动设备）
+    let lastTap = 0;
+    document.addEventListener('touchend', function(event) {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      
+      if (tapLength < 500 && tapLength > 0) {
+        // 双击事件
+        if (event.target.closest('.card')) {
+          const card = event.target.closest('.card');
+          card.classList.toggle('flipped');
+          event.preventDefault();
+        }
+      }
+      lastTap = currentTime;
+    });
+    
+    // 点击卡片翻转
+    document.addEventListener('click', function(event) {
+      if (event.target.closest('.card') && !event.target.closest('.nav-button')) {
+        const card = event.target.closest('.card');
+        card.classList.toggle('flipped');
+      }
+    });
+  </script>
+</body>
+</html>
